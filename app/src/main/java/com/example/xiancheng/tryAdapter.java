@@ -20,9 +20,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+
 public class tryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private final int contentView=1;
-    private final int dateView=2;
+    private final int contentView=0;
+    private final int dateView=1;
     private static ImageView imageView;
     private Context context;
     private List<Map<String, Object>> list;
@@ -31,131 +32,97 @@ public class tryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         this.context = context;
         this.list = list;
     }
-
-
-
+    @Override
+    public int getItemCount () {
+        return list.size();
+    }
 
     @Override
     public int getItemViewType(int i){
-
-//       if(list.size()>12)
+        if (list.get(i).size()!=1){
             return contentView;
-//        else
-//            return dateView;
+        }
+        else
+            return dateView;
+
     }
 
-    @NonNull
+
+
+    //@NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        //View view = LayoutInflater.from(context).inflate(R.layout.item,viewGroup,false);
             View view;
 
             if (i == contentView) {
                 view = LayoutInflater.from(context).inflate(R.layout.item, viewGroup, false);
+                return new contentViewHolder(view);
             } else {
-                view = LayoutInflater.from(context).inflate(R.layout.item_date, viewGroup, false);
+               view=LayoutInflater.from(context).inflate(R.layout.item_date,viewGroup,false);
+               return new dateViewHolder(view);
             }
-        return new contentViewHolder(view);
+
 
 
     }
 
         @Override
-        public void onBindViewHolder (@NonNull RecyclerView.ViewHolder holder,int i){
-//            if (holder instanceof dateViewHolder) {
-//                dateViewHolder viewHolder = (dateViewHolder) holder;
-//                viewHolder.text11.setText(list.get(i).get("title").toString());
-//                viewHolder.textView21.setText(list.get(i).get("hint").toString());
-//                Glide.with(context)
-//                        .load(list.get(i).get("images"))
-//                        .placeholder(R.drawable.loading)
-//                        .into(viewHolder.imageView1);
-//                String id = list.get(i).get("id").toString();
-//                viewHolder.linearLayout1.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        Intent intent;
-//                        intent = new Intent(context, MainActivity2.class);
-//                        Bundle bundle = new Bundle();
-//                        bundle.putString("id", id);
-//                        intent.putExtras(bundle);
-//                        context.startActivity(intent);
-//                    }
-//                });
-//
-//            }
+        public void onBindViewHolder (@NonNull RecyclerView.ViewHolder holder,int i) {
+            if (holder instanceof dateViewHolder) {
+                dateViewHolder viewHolder = (dateViewHolder) holder;
+                viewHolder.date1.setText(list.get(i).get("format1").toString());
 
-//            else if (holder instanceof contentViewHolder) {
-            if (holder instanceof contentViewHolder) {
-                contentViewHolder viewHolder = (contentViewHolder) holder;
-          //      for ( i=1;i<=list.size();i++) {
-          //          if (i != 6 &&(i + 1) % 7 == 0) {
+            } else if (holder instanceof contentViewHolder) {
+                    contentViewHolder viewHolder = (contentViewHolder) holder;
 
-          //              viewHolder.date1.setText(list.get(i).get("format1").toString());
-         //           } else {
+                            viewHolder.textView2.setText(list.get(i).get("hint").toString());
+                            viewHolder.text1.setText(list.get(i).get("title").toString());
 
-                        viewHolder.textView2.setText(list.get(i).get("hint").toString());
-                        viewHolder.text1.setText(list.get(i).get("title").toString());
+                            Glide.with(context)
+                                    .load(list.get(i).get("images"))
+                                    .placeholder(R.drawable.loading)
+                                    .into(viewHolder.imageView);
+                            String id = list.get(i).get("id").toString();
 
-                        Glide.with(context)
-                                .load(list.get(i).get("images"))
-                                .placeholder(R.drawable.loading)
-                                .into(viewHolder.imageView);
-                        String id = list.get(i).get("id").toString();
-
-                        viewHolder.linearLayout.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Intent intent;
-                                intent = new Intent(context, MainActivity2.class);
-                                Bundle bundle = new Bundle();
-                                bundle.putString("id", id);
-                                intent.putExtras(bundle);
-                                context.startActivity(intent);
-                            }
-                        });
+                            viewHolder.linearLayout.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Intent intent;
+                                    intent = new Intent(context, MainActivity2.class);
+                                    Bundle bundle = new Bundle();
+                                    bundle.putString("id", id);
+                                    intent.putExtras(bundle);
+                                    context.startActivity(intent);
+                                }
+                            });
+                        }
                     }
-         //       }
-        //    }
-        }
-
-
-        @Override
-        public int getItemCount () {
-            return list.size();
-        }
-
 
         class contentViewHolder extends RecyclerView.ViewHolder {
             TextView text1;
             TextView textView2;
             ImageView imageView;
             LinearLayout linearLayout;
-            TextView date1;
+
             public contentViewHolder(@NonNull View itemView) {
                 super(itemView);
                 text1 = itemView.findViewById(R.id.tv1);
                 textView2 = itemView.findViewById(R.id.tv2);
                 imageView = itemView.findViewById(R.id.iv);
                 linearLayout = itemView.findViewById(R.id.ln);
-                date1 = itemView.findViewById(R.id.date1);
+
             }
         }
 
         class dateViewHolder extends RecyclerView.ViewHolder {
-            TextView text11;
-            TextView textView21;
-            ImageView imageView1;
-            LinearLayout linearLayout1;
+                TextView date1;
 
-
-            public dateViewHolder(View view, @NonNull View itemView) {
+            public dateViewHolder( @NonNull View itemView) {
                 super(itemView);
-                text11 = itemView.findViewById(R.id.tv11);
-                textView21 = itemView.findViewById(R.id.tv21);
-                imageView1 = itemView.findViewById(R.id.iv1);
-                linearLayout1 = itemView.findViewById(R.id.ln1);
+                date1 = itemView.findViewById(R.id.date1);
             }
+
+
         }
 
 }
